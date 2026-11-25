@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Inventario</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <script>
+        // Redirige automáticamente al servidor web local cuando se abre con doble clic (file://)
+        if (window.location.protocol === 'file:' || window.location.protocol === 'file') {
+            window.location.href = 'http://localhost/inventario-web/index.php';
+        }
+    </script>
 </head>
 
 <body>
@@ -15,9 +21,9 @@
     </header>
 
     <nav>
-        <a href="index.html">Inicio</a>
-        <a href="productos.html">Productos</a>
-        <a href="agregar.html">Agregar Producto</a>
+        <a href="http://localhost/inventario-web/index.php">Inicio</a>
+        <a href="http://localhost/inventario-web/productos.php">Productos</a>
+        <a href="http://localhost/inventario-web/agregar.php">Agregar Producto</a>
     </nav>
 
     <main>
@@ -41,7 +47,8 @@
     <footer>
         Aplicaciones Web - Unidad 4
     </footer>
-
+    <br>
+    <img src="img/without.png" alt="Logo UTSAN JUAN" class="footer-img">
 </body>
 
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Inventario</title>
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body>
+
+    <header>
+        <h1>Sistema de Inventario</h1>
+        <p>Aplicación demostrativa para la Unidad IV</p>
+    </header>
+
+    <nav>
+        <a href="index.php">Inicio</a>
+        <a href="productos.php">Productos</a>
+        <a href="agregar.php">Agregar Producto</a>
+    </nav>
+
+    <main>
+        <h2>Bienvenido</h2>
+
+        <p>
+            Este sistema permite visualizar el inventario de productos
+            y registrar nuevos artículos.
+        </p>
+
+        <div class="card">
+            <h3>Módulos disponibles</h3>
+            <ul>
+                <li>Visualización de productos</li>
+                <li>Formulario de captura</li>
+                <li>Navegación entre páginas</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        Aplicaciones Web - Unidad 4
+    </footer>
+    <br>
+    <img src="img/without.png" alt="Logo UTSAN JUAN" class="footer-img">
+</body>
+
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación - 4.5 Estructura de Página (Sistema de Inventario)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            color: #2c3e50;
+            line-height: 1.5;
+            background: #eef2f5;
+            padding: 20px;
+        }
+        .hoja {
+            background: white;
+            width: 216mm;
+            min-height: 279mm;
+            margin: 0 auto 25px auto;
+            padding: 22mm 20mm;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .hoja {
+                width: 100%;
+                min-height: auto;
+                box-shadow: none;
+                margin: 0;
+                padding: 15mm 15mm;
+                page-break-after: always;
+                break-after: page;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+        .barra-imprimir {
+            max-width: 216mm;
+            margin: 0 auto 15px auto;
+            background: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-imprimir {
+            background: white;
+            color: #27ae60;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-imprimir:hover {
+            background: #f0f0f0;
+        }
+        .encabezado-doc {
+            border-bottom: 2px solid #7ec269;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-ut {
+            max-height: 50px;
+        }
+        .datos-materia {
+            text-align: right;
+            font-size: 12px;
+            color: #555;
+        }
+        h1.titulo-portada {
+            font-size: 20pt;
+            color: #c0392b;
+            text-align: center;
+            margin: 15px 0 5px 0;
+        }
+        h2.subtitulo-portada {
+            font-size: 13pt;
+            color: #555;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: normal;
+        }
+        .caja-datos-portada {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #7ec269;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        h2.seccion {
+            font-size: 14pt;
+            color: #2c3e50;
+            border-bottom: 1.5px solid #F4CB92;
+            padding-bottom: 4px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+        h3.subseccion {
+            font-size: 11pt;
+            color: #34495e;
+            margin: 12px 0 6px 0;
+        }
+        p, li {
+            font-size: 10pt;
+            color: #333;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        table.tabla-doc {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 15px 0;
+            font-size: 9.5pt;
+        }
+        table.tabla-doc th {
+            background: #F4CB92;
+            color: #000;
+            border: 1px solid #d4a768;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+        table.tabla-doc td {
+            border: 1px solid #ddd;
+            padding: 5px 8px;
+            vertical-align: top;
+        }
+        table.tabla-doc tr:nth-child(even) {
+            background: #fcfcfc;
+        }
+        .codigo-box {
+            background: #f4f6f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 8.5pt;
+            line-height: 1.35;
+            margin: 8px 0 12px 0;
+            white-space: pre-wrap;
+        }
+        .pie-pagina {
+            position: absolute;
+            bottom: 12mm;
+            left: 20mm;
+            right: 20mm;
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+            font-size: 9pt;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+        @media print {
+            .pie-pagina {
+                position: static;
+                margin-top: 25px;
+            }
+        }
+        .diagrama-contenedor {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 9pt;
+        }
+        .nodo-diagrama {
+            background: #eef7ee;
+            border: 1px solid #7ec269;
+            border-radius: 4px;
+            padding: 8px 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .nodo-decision {
+            background: #fff8ee;
+            border: 1px dashed #f39c12;
+            border-radius: 4px;
+            padding: 8px 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .flecha {
+            text-align: center;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 12pt;
+            line-height: 1;
+        }
+        .badge-estado {
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 8.5pt;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="barra-imprimir no-print">
+        <div>
+            <strong>Documentación Lista para Entrega</strong> (Formato académico 4-5 hojas)
+        </div>
+        <div>
+            <button onclick="window.print()" class="btn-imprimir">Imprimir o Guardar como PDF (Ctrl + P)</button>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 1 ==================== -->
+    <div class="hoja">
+        <div class="encabezado-doc">
+            <img src="img/without.png" alt="Logo UTSAN JUAN" class="logo-ut">
+            <div class="datos-materia">
+                <strong>Universidad Tecnológica de San Juan del Río</strong><br>
+                División de Tecnologías de la Información<br>
+                Materia: Aplicaciones Web • Unidad IV
+            </div>
+        </div>
+
+        <h1 class="titulo-portada">Sistema de Inventario Web</h1>
+        <h2 class="subtitulo-portada">Actividad 4.5: Documentación de actividad ESTRUCTURA DE PÁGINA</h2>
+
+        <div class="caja-datos-portada">
+            <div>
+                <strong>Docente:</strong> José Alfredo Ramírez Yáñez<br>
+                <strong>Asignatura:</strong> Aplicaciones Web<br>
+                <strong>Tipo de Evaluación:</strong> SABER HACER (100 pts)
+            </div>
+            <div>
+                <strong>Proyecto:</strong> inventario-web (CRUD y Reportes)<br>
+                <strong>Entorno:</strong> Apache 2.4, PHP 8.2, MySQL (XAMPP)<br>
+                <strong>Fecha de entrega:</strong> Noviembre 2026
+            </div>
+        </div>
+
+        <h2 class="seccion">1. Requerimientos del Sistema</h2>
+        <p>El proyecto consiste en una aplicación web interactiva desarrollada para la gestión y control de inventarios de artículos, implementando el ciclo completo de operaciones de datos (CRUD), persistencia en servidor de base de datos relacional y generación de reportes en hojas de cálculo.</p>
+
+        <h3 class="subseccion">1.1. Requerimientos Funcionales (RF)</h3>
+        <table class="tabla-doc">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Código</th>
+                    <th style="width: 30%;">Requerimiento</th>
+                    <th>Descripción detallada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>RF-01</strong></td>
+                    <td>Visualización de Inicio</td>
+                    <td>Panel principal con navegación fluida, mensaje de bienvenida y desglose de módulos disponibles.</td>
+                </tr>
+                <tr>
+                    <td><strong>RF-02</strong></td>
+                    <td>Consulta de Catálogo</td>
+                    <td>Listado dinámico en tabla HTML de todos los productos almacenados en MySQL (ID, nombre, categoría, descripción, existencia).</td>
+                </tr>
+                <tr>
+                    <td><strong>RF-03</strong></td>
+                    <td>Registro de Productos</td>
+                    <td>Formulario para captura de nuevos artículos con validaciones en servidor (campos obligatorios y cantidad no negativa).</td>
+                </tr>
+                <tr>
+                    <td><strong>RF-04</strong></td>
+                    <td>Modificación de Artículos</td>
+                    <td>Edición de datos existentes mediante formulario precargado por ID, ejecutando sentencia UPDATE.</td>
+                </tr>
+                <tr>
+                    <td><strong>RF-05</strong></td>
+                    <td>Eliminación con Confirmación</td>
+                    <td>Borrado seguro de artículos (DELETE) con diálogo nativo de confirmación en JavaScript para evitar pérdidas accidentales.</td>
+                </tr>
+                <tr>
+                    <td><strong>RF-06</strong></td>
+                    <td>Generación de Reporte Excel</td>
+                    <td>Exportación descargable inmediata de la tabla a formato Microsoft Excel (.xls) con suma total y codificación UTF-8.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="subseccion">1.2. Requerimientos No Funcionales (RNF)</h3>
+        <ul>
+            <li><strong>RNF-01 (Compatibilidad y Entorno):</strong> Ejecución local sobre pila XAMPP (Apache HTTP Server y MariaDB/MySQL).</li>
+            <li><strong>RNF-02 (Persistencia y Robustez):</strong> Conexión mediante interfaz PHP Data Objects (PDO) con sentencias preparadas contra inyecciones SQL.</li>
+            <li><strong>RNF-03 (Semántica y Estilos):</strong> Cumplimiento de estándares HTML5 (header, nav, main, footer, table, form) y estilos centralizados en CSS.</li>
+            <li><strong>RNF-04 (Usabilidad y Soporte de Caracteres):</strong> Codificación integral en UTF-8 (soporte para acentos, letra ñ y caracteres en español).</li>
+        </ul>
+
+        <div class="pie-pagina">
+            <span>Sistema de Inventario - Documentación Técnica</span>
+            <span>Página 1</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 2 ==================== -->
+    <div class="hoja">
+        <div class="encabezado-doc">
+            <strong>4.5 Documentación de actividad ESTRUCTURA DE PÁGINA</strong>
+            <span style="font-size: 11px; color: #777;">Diseño de Solución y Pseudocódigo</span>
+        </div>
+
+        <h2 class="seccion">2. Diseño de Solución del Cliente</h2>
+        <p>La solución se diseñó bajo una arquitectura cliente-servidor tradicional de dos capas web, donde el cliente interactúa mediante el navegador a través de peticiones HTTP/GET y HTTP/POST, y el servidor Apache interpreta los scripts PHP consultando la base de datos MySQL.</p>
+
+        <h3 class="subseccion">2.1. Estructura del Proyecto</h3>
+        <table class="tabla-doc">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Archivo</th>
+                    <th style="width: 25%;">Tipo</th>
+                    <th>Responsabilidad en el Sistema</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>conexion.php</code></td>
+                    <td>Backend / Config</td>
+                    <td>Instancia y gestión del objeto PDO conectado a la base de datos <code>inventario_db</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>index.php</code></td>
+                    <td>Vista Principal</td>
+                    <td>Interfaz de bienvenida y navegación institucional (respetando la maquetación original).</td>
+                </tr>
+                <tr>
+                    <td><code>productos.php</code></td>
+                    <td>Vista / Controlador</td>
+                    <td>Consulta (SELECT) y despliegue del catálogo con botones de acción y exportación.</td>
+                </tr>
+                <tr>
+                    <td><code>agregar.php</code></td>
+                    <td>Vista / Controlador</td>
+                    <td>Formulario de captura y procesamiento de inserción (INSERT) con validaciones.</td>
+                </tr>
+                <tr>
+                    <td><code>editar.php</code></td>
+                    <td>Vista / Controlador</td>
+                    <td>Búsqueda por ID, carga de valores y guardado de modificaciones (UPDATE).</td>
+                </tr>
+                <tr>
+                    <td><code>eliminar.php</code></td>
+                    <td>Controlador</td>
+                    <td>Ejecución de baja de registro (DELETE) y redirección con notificación.</td>
+                </tr>
+                <tr>
+                    <td><code>exportar_excel.php</code></td>
+                    <td>Servicio de Reportes</td>
+                    <td>Construcción de hoja de cálculo MIME con cabeceras HTTP y marca BOM UTF-8.</td>
+                </tr>
+                <tr>
+                    <td><code>style.css</code></td>
+                    <td>Estilos globales</td>
+                    <td>Reglas CSS institucionales para colores, reset, formularios, tablas y botones.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="subseccion">2.2. Diseño de Base de Datos (Modelo Relacional)</h3>
+        <p>Base de datos: <code>inventario_db</code> | Tabla: <code>productos</code> (Cotejamiento: <code>utf8mb4_unicode_ci</code>)</p>
+        <div class="codigo-box">CREATE TABLE productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    descripcion TEXT NULL,
+    cantidad INT NOT NULL DEFAULT 0,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;</div>
+
+        <h2 class="seccion">3. Pseudocódigo de Operaciones Clave</h2>
+
+        <h3 class="subseccion">3.1. Algoritmo de Registro de Producto (agregar.php)</h3>
+        <div class="codigo-box">Inicio Registro_Producto
+    Si Petición es POST Entonces:
+        nombre &larr; Limpiar(Entrada["nombre"])
+        categoria &larr; Limpiar(Entrada["categoria"])
+        descripcion &larr; Limpiar(Entrada["descripcion"])
+        cantidad &larr; ConvertirAEntero(Entrada["cantidad"])
+
+        Si nombre está vacío O categoria está vacía O cantidad &lt; 0 Entonces:
+            MostrarMensajeError("Campos obligatorios incompletos o cantidad inválida")
+        Sino:
+            Ejecutar Sentencia Preparada:
+                "INSERT INTO productos (nombre, categoria, descripcion, cantidad) VALUES (?, ?, ?, ?)"
+            Redirigir a "productos.php?msg=agregado"
+        Fin Si
+    Fin Si
+Fin</div>
+
+        <div class="pie-pagina">
+            <span>Sistema de Inventario - Documentación Técnica</span>
+            <span>Página 2</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 3 ==================== -->
+    <div class="hoja">
+        <div class="encabezado-doc">
+            <strong>4.5 Documentación de actividad ESTRUCTURA DE PÁGINA</strong>
+            <span style="font-size: 11px; color: #777;">Diagrama de Flujo y Gestión de Tiempo</span>
+        </div>
+
+        <h2 class="seccion">4. Diagrama de Flujo del Sistema</h2>
+        <p>A continuación se representa la lógica de navegación del usuario y el flujo de decisiones del sistema entre el frontend y el servidor de base de datos:</p>
+
+        <div class="diagrama-contenedor">
+            <div class="nodo-diagrama">[ INICIO: Usuario ingresa a index.php ]</div>
+            <div class="flecha">&darr;</div>
+            <div class="nodo-diagrama">Menú de Navegación: Selecciona "Productos" o "Agregar Producto"</div>
+            <div class="flecha">&darr;</div>
+            <div class="nodo-decision">&iquest;Cuál acción realiza el usuario?</div>
+            
+            <table class="tabla-doc" style="margin-top: 5px;">
+                <tr>
+                    <th style="width: 25%;">A) Ver Productos</th>
+                    <th style="width: 25%;">B) Agregar Producto</th>
+                    <th style="width: 25%;">C) Modificar Producto</th>
+                    <th style="width: 25%;">D) Eliminar / Exportar</th>
+                </tr>
+                <tr>
+                    <td>Ejecuta <code>SELECT *</code> en MySQL y muestra la tabla en <code>productos.php</code>.</td>
+                    <td>Llena formulario en <code>agregar.php</code>. Valida campos requeridos. Si es válido &rarr; <code>INSERT</code>.</td>
+                    <td>Carga datos en <code>editar.php?id=X</code>. Usuario edita y confirma &rarr; <code>UPDATE</code>.</td>
+                    <td><strong>Eliminar:</strong> Diálogo confirm() &rarr; <code>DELETE</code>.<br><strong>Exportar:</strong> Descarga reporte .xls.</td>
+                </tr>
+            </table>
+
+            <div class="flecha">&darr;</div>
+            <div class="nodo-diagrama">[ FIN: Retorno a lista actualizada con mensaje de confirmación ]</div>
+        </div>
+
+        <h2 class="seccion">5. Gestión de Tiempo Invertido</h2>
+        <p>Desglose de las etapas del ciclo de vida del desarrollo de software aplicadas en la actividad, detallando el tiempo estimado frente al tiempo real dedicado:</p>
+
+        <table class="tabla-doc">
+            <thead>
+                <tr>
+                    <th>Etapa / Tarea Realizada</th>
+                    <th style="text-align: center;">Horas Est.</th>
+                    <th style="text-align: center;">Horas Reales</th>
+                    <th>Entregables / Resultados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1. Análisis de Requerimientos:</strong> Definición de módulos y alcance de la actividad.</td>
+                    <td style="text-align: center;">2.0 h</td>
+                    <td style="text-align: center;">1.5 h</td>
+                    <td>Lista de requerimientos y casos de uso.</td>
+                </tr>
+                <tr>
+                    <td><strong>2. Maquetación y Diseño:</strong> Estructura semántica en HTML5 y estilos en CSS (header, nav, cards, tables).</td>
+                    <td style="text-align: center;">3.5 h</td>
+                    <td style="text-align: center;">3.0 h</td>
+                    <td>Archivos base <code>index.html</code>, <code>style.css</code>.</td>
+                </tr>
+                <tr>
+                    <td><strong>3. Modelado de Base de Datos:</strong> Creación de esquema MySQL, tabla de productos y script SQL.</td>
+                    <td style="text-align: center;">2.0 h</td>
+                    <td style="text-align: center;">1.5 h</td>
+                    <td>Base <code>inventario_db</code> y <code>database.sql</code>.</td>
+                </tr>
+                <tr>
+                    <td><strong>4. Desarrollo Backend CRUD:</strong> Conexión PDO, registro, edición y eliminación de datos en PHP.</td>
+                    <td style="text-align: center;">5.0 h</td>
+                    <td style="text-align: center;">4.5 h</td>
+                    <td><code>conexion.php</code>, <code>agregar.php</code>, <code>editar.php</code>, <code>eliminar.php</code>.</td>
+                </tr>
+                <tr>
+                    <td><strong>5. Generador de Reportes:</strong> Programación del script de exportación a Microsoft Excel con codificación UTF-8.</td>
+                    <td style="text-align: center;">2.5 h</td>
+                    <td style="text-align: center;">2.0 h</td>
+                    <td>Módulo funcional <code>exportar_excel.php</code>.</td>
+                </tr>
+                <tr>
+                    <td><strong>6. Pruebas y Depuración:</strong> Pruebas unitarias, corrección de codificación ortográfica y pruebas en servidor.</td>
+                    <td style="text-align: center;">3.0 h</td>
+                    <td style="text-align: center;">2.5 h</td>
+                    <td>Matriz de pruebas aprobada sin errores.</td>
+                </tr>
+                <tr>
+                    <td><strong>7. Elaboración de Documentación:</strong> Redacción técnica, pseudocódigos, manual y diagramas.</td>
+                    <td style="text-align: center;">3.0 h</td>
+                    <td style="text-align: center;">2.5 h</td>
+                    <td>Documento técnico final de la actividad 4.5.</td>
+                </tr>
+                <tr style="background: #eef7ee; font-weight: bold;">
+                    <td>TOTAL DE TIEMPO INVERTIDO</td>
+                    <td style="text-align: center;">21.0 h</td>
+                    <td style="text-align: center;">17.5 h</td>
+                    <td>Proyecto terminado y validado al 100%.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pie-pagina">
+            <span>Sistema de Inventario - Documentación Técnica</span>
+            <span>Página 3</span>
+        </div>
+    </div>
+
+    <!-- ==================== PÁGINA 4 ==================== -->
+    <div class="hoja">
+        <div class="encabezado-doc">
+            <strong>4.5 Documentación de actividad ESTRUCTURA DE PÁGINA</strong>
+            <span style="font-size: 11px; color: #777;">Pruebas Unitarias y Manual de Usuario</span>
+        </div>
+
+        <h2 class="seccion">6. Pruebas Unitarias y de Integración</h2>
+        <p>Se diseñó una batería de pruebas para comprobar la integridad de datos, las validaciones de formulario y la correcta comunicación entre PHP y MySQL:</p>
+
+        <table class="tabla-doc">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 25%;">Caso de Prueba</th>
+                    <th style="width: 25%;">Datos de Entrada</th>
+                    <th>Resultado Esperado</th>
+                    <th style="width: 12%; text-align: center;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>CP-01</strong></td>
+                    <td>Consulta general de catálogo</td>
+                    <td>Acceso a <code>productos.php</code></td>
+                    <td>Despliegue ordenado de filas con datos reales de MySQL.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-02</strong></td>
+                    <td>Inserción con datos válidos</td>
+                    <td>Nombre: "Compás", Cat: "Papelería", Cant: 25</td>
+                    <td>Se guarda en la tabla y redirige con mensaje de éxito.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-03</strong></td>
+                    <td>Validación de campos vacíos</td>
+                    <td>Nombre: "", Cantidad: ""</td>
+                    <td>Rechaza el guardado y muestra alerta preventiva.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-04</strong></td>
+                    <td>Modificación de producto</td>
+                    <td>Cambio de cantidad de 25 a 50</td>
+                    <td>Actualiza registro vía UPDATE y refleja nuevo stock.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-05</strong></td>
+                    <td>Eliminación con confirmación</td>
+                    <td>Clic en Eliminar + aceptar confirmación</td>
+                    <td>Elimina registro de BD y desaparece de la tabla.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CP-06</strong></td>
+                    <td>Descarga de Reporte Excel</td>
+                    <td>Clic en "Exportar a Excel"</td>
+                    <td>Descarga archivo <code>.xls</code> legible con acentos intactos.</td>
+                    <td style="text-align: center;"><span class="badge-estado">Aprobado</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="seccion">7. Manual de Usuario (Guía de Operación)</h2>
+
+        <h3 class="subseccion">Paso 1: Puesta en Marcha del Servidor</h3>
+        <p>1. Abra el panel de control <strong>XAMPP Control Panel</strong>.<br>
+        2. Presione el botón <strong>Start</strong> en el módulo <strong>Apache</strong> y en el módulo <strong>MySQL</strong> (ambos deberán mostrarse en color verde).</p>
+
+        <h3 class="subseccion">Paso 2: Acceso a la Aplicación</h3>
+        <p>Abra su navegador web e ingrese a la dirección: <strong><code>http://localhost/inventario-web/</code></strong> o bien haga doble clic en el acceso directo <strong><code>ABRIR SISTEMA</code></strong> ubicado dentro de la carpeta del proyecto.</p>
+
+        <h3 class="subseccion">Paso 3: Navegación y Uso de Módulos</h3>
+        <ul>
+            <li><strong>Consultar Inventario:</strong> Haga clic en la pestaña <em>Productos</em> para visualizar la lista completa con existencias.</li>
+            <li><strong>Registrar Artículo:</strong> En la pestaña <em>Agregar Producto</em>, ingrese el nombre, categoría, descripción y cantidad, luego presione <em>Guardar Producto</em>.</li>
+            <li><strong>Modificar Artículo:</strong> En la tabla de productos, presione el botón verde <em>Modificar</em> sobre el producto deseado, cambie los valores y haga clic en <em>Guardar Cambios</em>.</li>
+            <li><strong>Eliminar Artículo:</strong> Presione el botón rojo <em>Eliminar</em> y confirme la pregunta en pantalla para remover el artículo.</li>
+            <li><strong>Generar Reporte Excel:</strong> En la parte superior de la tabla de productos, presione el botón <em>Exportar a Excel</em> para descargar la hoja de cálculo.</li>
+        </ul>
+
+        <h2 class="seccion" style="margin-top: 15px;">8. Conclusión</h2>
+        <p>La actividad demostró la importancia de estructurar correctamente una aplicación web integrando el frontend semántico con un backend robusto y una base de datos relacional. Se cumplió satisfactoriamente con todos los criterios de funcionalidad, diseño y documentación solicitados para la Unidad IV.</p>
+
+        <div class="pie-pagina">
+            <span>Sistema de Inventario - Documentación Técnica</span>
+            <span>Página 4</span>
+        </div>
+    </div>
+
+</body>
+</html>
